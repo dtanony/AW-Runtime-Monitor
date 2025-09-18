@@ -1,0 +1,11 @@
+components_recording:
+  - name: EgoEstimatedKinematic
+  - name: GroundTruthKinematic
+  - name: GroundTruthSize
+  - name: PerceptionObject
+  - name: BoundingBoxPerceptionObject
+  - name: PlanningTrajectory
+  - name: ControlCommand
+  - name: CameraFootage
+  - name: AWSIMMetadata
+

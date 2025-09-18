@@ -1,0 +1,5 @@
+numpy<2
+pyyaml
+scipy
+opencv-python
+cv-bridge
