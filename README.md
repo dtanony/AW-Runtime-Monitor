@@ -52,3 +52,15 @@ options:
 ```
 
 To configure which types of data will be recorded, modify [config.yaml](config.yaml) file.
+
+By default, trace will be started recording when the autonomous driving mode is ready, and 
+the recording will stop once the ego reaches its destination. 
+Recorded text data will be saved to `<path-to-save-traces>.json` file, while
+video will be saved to `<path-to-save-traces>_footage.mp4` file. 
+
+### Using with AWSIM-Script
+The monitor can be used with [AWSIM-Script](https://github.com/dtanony/AWSIM-Script-Client)
+to execute a single scenario or a sequence of scenarios. 
+When multiple scenarios are provided, the monitor saves a separate trace for each one. 
+More details are available at https://github.com/dtanony/AWSIM-Script-Client.
+
