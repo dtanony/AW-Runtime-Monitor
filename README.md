@@ -9,7 +9,7 @@ If a command is unsafe, the shield activates AEB. This safety shield acts as a f
 
 ### Usage
 1. Install [AWSIM-Labs](https://github.com/dtanony/AWSIM-Labs) and [Autoware](https://github.com/dtanony/autoware0412) 
-by following their provided instructions.
+by following their installation instructions.
 2. Clone this repo and install dependencies
 ```bash
 git clone https://github.com/dtanony/AW-Runtime-Monitor.git
@@ -25,6 +25,9 @@ python main.py -o <path-to-save-traces>
 ```
 
 Note that you need to source Autoware's setup file before launching the monitor.
+Autoware is assumed to be installed in the home directory (`~`). 
+If it is installed elsewhere, update the path accordingly.
+
 By default, the shield is enable. To disable it, use option `-v false`.
 For more details about the tool usage, use `python main.py -h`.
 
