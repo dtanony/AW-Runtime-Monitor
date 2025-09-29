@@ -31,7 +31,7 @@ def main():
     # Parse command line arguments
     cli_args = parse_args()
     to_verify_control_cmd = True
-    if str(cli_args.verify_planning_trajectory).lower() == "false":
+    if str(cli_args.verify_control_cmd).lower() == "false":
         to_verify_control_cmd = False
     no_sim = int(cli_args.no_sim) if cli_args.no_sim else 1
     format = 'json'
