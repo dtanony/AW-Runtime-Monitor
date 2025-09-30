@@ -1,10 +1,8 @@
 from control.shield_utils import *
-from planning.PlanningTrajectory import ConstantHeadingVehicle
 from recorder.utils import *
 import math
 
 # Safety shield for control module.
-
 def verify_control_cmd(control_cmd, recorded_messages, logger):
     """
     :param control_cmd:
@@ -174,3 +172,30 @@ def find_latest_perp_obj(recorded_perp_info, object_id, bounded_entry_id):
             if obj['id'] == object_id:
                 return obj, perp_entry['timestamp']
     return None, None
+
+class ConstantHeadingVehicle:
+    """
+    represent ego vehicle moving with a constant heading angle
+    """
+    def __init__(self, vehicle_current_pose,
+                 veh_length, veh_width, veh_center_x, veh_center_y,):
+        self.init_pos = np.array((vehicle_current_pose['position']['x'],
+                                  vehicle_current_pose['position']['y']))
+        self.init_rot = vehicle_current_pose['rotation']['z']
+        self.init_vertices = (
+            get_ego_world_vertices(self.init_pos, self.init_rot,
+                                (veh_length, veh_width),
+                         (veh_center_x, veh_center_y)))
+        heading_rad = np.deg2rad(self.init_rot)
+        self.norm_vel = np.array((
+            np.cos(heading_rad), np.sin(heading_rad)
+        ))
+
+    # get the 4 vertices when the veh moves to $position
+    def get_vertices_whenat_pos(self, position):
+        direction = position - self.init_pos
+        return direction + self.init_vertices
+
+    def get_vertices_at_time(self, time, speed):
+        velocity = speed * self.norm_vel
+        return self.init_vertices + time * velocity

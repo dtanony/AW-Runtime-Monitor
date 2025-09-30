@@ -7,14 +7,21 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Runtime Monitor for Autoware and AWSIM simulator. '
                                                  'Adjust the component to record data by modifying file config.yaml')
     parser.add_argument('-o', '--output',
-                      help='Output trace file name (default: auto-generated with timestamp)')
+                        help='Output trace file name (default: auto-generated with timestamp)')
     parser.add_argument('-f', '--format',
-                      help='either json or yaml (default: json)')
+                        help='either json or yaml (default: json)',
+                        choices=['json', 'yaml'],
+                        default='json')
     parser.add_argument('-n', '--no_sim',
-                      help='Simulation number, use as suffix to the file name (default: 1)')
+                        help='Simulation number, use as suffix to the file name (default: 1)',
+                        type=int,
+                        default=1)
     parser.add_argument('-v', '--verify_control_cmd',
-                        help='To verify the safety of control commands, i.e., enable shielding (true or false, default: yes)')
+                        help='To verify the safety of control commands, i.e., enable shielding (true or false, default: true)',
+                        choices=['true', 'false'],
+                        default='true')
     return parser.parse_args()
+
 
 def load_config(yaml_file):
     with open(yaml_file, 'r') as f:
@@ -30,15 +37,7 @@ def load_config(yaml_file):
 def main():
     # Parse command line arguments
     cli_args = parse_args()
-    to_verify_control_cmd = True
-    if str(cli_args.verify_control_cmd).lower() == "false":
-        to_verify_control_cmd = False
-    no_sim = int(cli_args.no_sim) if cli_args.no_sim else 1
-    format = 'json'
-    if cli_args.format == 'yaml':
-        format = 'yaml'
-    elif cli_args.format is not None and cli_args.format != 'json':
-        print('Format must be either json or yaml. Json is used by default.')
+    to_verify_control_cmd = cli_args.verify_control_cmd == "true"
 
     awsim_client_op_state_topic = AWSIMClientOpStateTrackerTopic()
     topics_to_record_data = load_config(config_path)
@@ -50,8 +49,8 @@ def main():
     rclpy.init()
     recorder = MultiTopicRecorder(topics,
                                   output_filename=cli_args.output,
-                                  format=format,
-                                  no_sim=no_sim,
+                                  format=cli_args.format,
+                                  no_sim=cli_args.no_sim,
                                   to_verify_control_cmd=to_verify_control_cmd)
 
     recorder.subscribe()
