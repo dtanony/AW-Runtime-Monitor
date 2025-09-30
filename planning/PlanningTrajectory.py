@@ -3,7 +3,6 @@ from recorder.Topic import *
 from control.shield_utils import *
 
 PLTR_TOPIC_NAME = '/planning/scenario_planning/trajectory'
-PLTR_UNVERIFIED_TOPIC_NAME = '/planning/scenario_planning/trajectory_unverified'
 PLTR_MSG_TYPE_STR = 'autoware_planning_msgs/msg/Trajectory'
 
 # Planning trajectory

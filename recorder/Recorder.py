@@ -40,7 +40,6 @@ class MultiTopicRecorder(Node):
     # $topics is a list of (class) Topic instances
     def __init__(self, topics, output_filename, format, no_sim=1, to_verify_control_cmd=True):
         super().__init__('fomaad_monitor')
-        self.diff_time = -1.0
         self.output_filename = output_filename
         self.format = format
         self.to_verify_control_cmd = to_verify_control_cmd
@@ -129,21 +128,13 @@ class MultiTopicRecorder(Node):
 
         def save_msg(msg):
             if self.to_verify_control_cmd and isinstance(topic, ControlCommandTopic):
-                current_time = self.get_clock().now().nanoseconds/10**9
-                msg_time = object2timestamp(msg.stamp, round=False)
-                if self.diff_time and current_time <= msg_time + self.diff_time + 0.1:
-                    # Verify control command is safe
-                    no_collision, ttc = verify_control_cmd(msg, self.messages, self.get_logger())
-                    if not no_collision:
-                        self.get_logger().info(f"Unsafe control command, estimated TTC: {ttc}")
-                        if ttc <= TTC_THRESHOLD:
-                            self.get_logger().info("Activating AEB...")
-                            self.activate_aeb()
-
-            if isinstance(topic, GroundTruthKinematicTopic) and self.diff_time < 0:
-                sim_time = object2timestamp(msg.stamp, round=False)
-                sys_time = self.get_clock().now().nanoseconds / 10 ** 9
-                self.diff_time = sys_time - sim_time
+                # Verify control command is safe
+                no_collision, ttc = verify_control_cmd(msg, self.messages, self.get_logger())
+                if not no_collision:
+                    self.get_logger().info(f"Unsafe control command, estimated TTC: {ttc}")
+                    if ttc <= TTC_THRESHOLD:
+                        self.get_logger().info("Activating AEB...")
+                        self.activate_aeb()
 
             if topic.save_data:
                 if isinstance(topic, CameraFootageTopic):
