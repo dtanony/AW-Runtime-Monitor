@@ -33,7 +33,7 @@ For more details about the tool usage, use `python main.py -h`.
 
 ```bash
 $ python main.py -h
-usage: main.py [-h] [-o OUTPUT] [-f FORMAT] [-n NO_SIM] [-v VERIFY_CONTROL_CMD]
+usage: main.py [-h] [-o OUTPUT] [-f {json,yaml}] [-n NO_SIM] [-v {true,false}]
 
 Runtime Monitor for Autoware and AWSIM simulator. Adjust the component to record data by modifying
 file config.yaml
@@ -41,14 +41,14 @@ file config.yaml
 options:
   -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
-                        Output YAML filename (default: auto-generated with timestamp)
-  -f FORMAT, --format FORMAT
+                        Output trace file name (default: auto-generated with timestamp)
+  -f {json,yaml}, --format {json,yaml}
                         either json or yaml (default: json)
   -n NO_SIM, --no_sim NO_SIM
                         Simulation number, use as suffix to the file name (default: 1)
-  -v VERIFY_CONTROL_CMD, --verify_control_cmd VERIFY_CONTROL_CMD
+  -v {true,false}, --verify_control_cmd {true,false}
                         To verify the safety of control commands, i.e., enable shielding (true or
-                        false, default: yes)
+                        false, default: true)
 ```
 
 To configure which types of data will be recorded, modify [config.yaml](config.yaml) file.
